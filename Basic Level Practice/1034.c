@@ -1,135 +1,94 @@
 #include<stdio.h>
-//测试点真他妈的贱，居然要用long long 才能过！！！
-typedef struct _rational_number
-{
-    long long k;
-    long long a;
-    long long b;
-}RationalNumber; // k + a/b
 
-long long gcd(long long a, long long b)
+int gcd(long long a, long long b)
 {
-    long long m;
-    while( a % b)
+    int c;
+    while(a % b)
     {
-        m = a;
+        c = a;
         a = b;
-        b = m % b;
+        b = c % b;
     }
     return b;
 }
-void formatRN(RationalNumber *pRN)
+
+void out(long long a, long long b)
 {
-    if(pRN->b == 0)
+    if(b == 0)
+    {
+        printf("Inf");
         return;
-        
-    int m = gcd(pRN->a, pRN->b);
-    
-    pRN->a /= m;
-    pRN->b /= m;
-    
-    if(pRN->b < 0)
-    {
-        pRN->a = -pRN->a;
-        pRN->b = -pRN->b;
     }
     
-    pRN->k = pRN->a / pRN->b;
-    pRN->a = pRN->a % pRN->b;
+    long long k = a / b;
+    long long c = a % b;
+    long long d = b;
+    long long m = gcd(c,d);
+    c = c / m;
+    d = d / m;
     
-    if(pRN->k < 0)
+    if(d < 0)
     {
-        pRN->a = -pRN->a;
+        c = -c;
+        d = -d;
     }
-}
-void outRN(RationalNumber rn)
-{
-    if(rn.k < 0 )
+    
+    if( k > 0)
     {
-        printf("(%lld",rn.k);
-        if(rn.a == 0) printf(")");
-        else printf(" %lld/%lld)",rn.a, rn.b);
+        printf("%lld", k);
+        if( c!=0 ) printf(" %lld/%lld",c,d);
     }
-    else if( rn.k == 0 && rn.a < 0)
-    {
-        printf("(%lld/%lld)",rn.a, rn.b);
-    }
-    else if(rn.k == 0 && rn.a == 0){
-        printf("0");
-    }
-    else if(rn.k == 0 && rn.a > 0)
-    {
-        printf("%lld/%lld",rn.a, rn.b);
-    }
-    else if (rn.k > 0 && rn.a == 0) {
-        printf("%lld",rn.k);
+    else if (k == 0) {
+        if(c < 0) printf("(%lld/%lld)",c,d);
+        else if(c == 0) printf("0");
+        else printf("%lld/%lld",c,d);
     }
     else {
-        printf("%lld %lld/%lld",rn.k, rn.a , rn.b);
+        printf("(%lld",k);
+        if(c == 0) printf(")");
+        else printf(" %lld/%lld)",-c,d);
     }
+    
     
 }
 
-void operate(RationalNumber A, RationalNumber B, char op, RationalNumber *pC)
+void operate(long long a1, long long b1, long long a2, long long b2, char op)
 {
-    switch (op) {
+    double a, b;
+    
+    switch (op)
+    {
         case '+':
-            pC->a = A.a*B.b + A.b*B.a;
-            pC->b = A.b*B.b;
+            a = a1*b2 + a2*b1;
+            b = b1*b2;
             break;
         case '-':
-            pC->a = A.a*B.b - A.b*B.a;
-            pC->b = A.b*B.b;
+            a = a1*b2 - a2*b1;
+            b = b1*b2;
             break;
         case '*':
-            pC->a = A.a*B.a;
-            pC->b = A.b*B.b;
+            a = a1*a2;
+            b = b1*b2;
             break;
         case '/':
-            pC->a = A.a*B.b;
-            pC->b = A.b*B.a;    
+            a = a1*b2;
+            b = b1*a2;
+            break;
         default:
             break;
     }
+    out(a1,b1);printf(" %c ",op);out(a2,b2);printf(" = ");out(a,b);printf("\n");
 }
-
 int main()
 {
-    RationalNumber A, B, radd,rsub,rmuli,rdivi;
+    long long a1,b1,a2,b2;
     
-    scanf("%lld/%lld %lld/%lld",&A.a, &A.b, &B.a, &B.b);
-    operate(A,B,'+',&radd);
-    operate(A,B,'-',&rsub);
-    operate(A,B,'*',&rmuli);
-    if(B.a != 0)
-    {
-        operate(A,B,'/',&rdivi);
-        formatRN(&rdivi);
-    } 
+    scanf("%lld/%lld %lld/%lld",&a1,&b1,&a2,&b2);
     
-    formatRN(&A);formatRN(&B);formatRN(&radd);
-    formatRN(&rsub);formatRN(&rmuli);
+    operate(a1,b1,a2,b2,'+');
+    operate(a1,b1,a2,b2,'-');
+    operate(a1,b1,a2,b2,'*');
+    operate(a1,b1,a2,b2,'/');
     
-    outRN(A);printf(" + ");outRN(B);printf(" = ");outRN(radd);printf("\n");
-    outRN(A);printf(" - ");outRN(B);printf(" = ");outRN(rsub);printf("\n");
-    outRN(A);printf(" * ");outRN(B);printf(" = ");outRN(rmuli);printf("\n");
-    outRN(A);printf(" / ");outRN(B);printf(" = ");
-    if(B.k==0 && B.a == 0)
-    {
-        printf("Inf\n");
-    }
-    else {
-        outRN(rdivi);
-        printf("\n");
-    }
-    
+    return 0;
 }
-
-
-
-
-
-
-
-
-
