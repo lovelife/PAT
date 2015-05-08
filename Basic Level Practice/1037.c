@@ -1,32 +1,20 @@
 #include<stdio.h>
 
-typedef struct _rank
-{
-    int school;
-    int score;
-}Rank;
-
-Rank r[100000];
-
+//Galleon.Sickle.Knut
 int main()
 {
-    int n , i, sc[100000] = {0};
-    int maxscore = 0, maxschool = 0;
+    int Galleon,Sickle,Knut;
     
-    scanf("%d",&n);
+    scanf("%d.%d.%d", &Galleon,&Sickle,&Knut);
+    int p = Galleon*17*29 + Sickle*29 + Knut;
     
-    for( i = 0; i < n; i++)
-    {
-        scanf("%d %d", &(r[i].school), &(r[i].score) );
-        sc[ r[i].school ] += r[i].score;
-        
-        if( maxscore < sc[r[i].school])
-        {
-            maxscore = sc[r[i].school];
-            maxschool = r[i].school;        
-        }
-    }
-    printf("%d %d",maxschool, maxscore);
+    scanf("%d.%d.%d", &Galleon,&Sickle,&Knut);
+    int a = Galleon*17*29 + Sickle*29 + Knut;
+    
+    int c = a - p;
+    
+    if( c < 0) printf("-%d.%d.%d",-c/(17*29), -(c/29) % 17, -c % 29);
+    else printf("%d.%d.%d",c/(17*29), (c/29) % 17, c % 29);
     
     return 0;
 }
